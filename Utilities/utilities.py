@@ -2,7 +2,9 @@ import streamlit as st
 from streamlit_extras.app_logo import add_logo
 
 def logo():
-    add_logo('Imagenes\Metalurg_app.png',height =90)
+    add_logo(
+        'https://github.com/clayton-iliquin/software-MetalurgIA/blob/main/Imagenes/Metalurg_app.png',
+        height =90)
 
 
 def grid(n_rows):
