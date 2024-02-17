@@ -48,7 +48,7 @@ with col2:
     
     st.divider()
 
-    st.image('https://github.com/clayton-iliquin/software-MetalurgIA/blob/main/Imagenes/Hidrociclon.jpg')
+    st.image('https://raw.githubusercontent.com/clayton-iliquin/software-MetalurgIA/blob/main/Imagenes/Hidrociclon.jpg')
 
 
 with col3:

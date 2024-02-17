@@ -3,7 +3,7 @@ from streamlit_extras.app_logo import add_logo
 
 def logo():
     add_logo(
-        'https://github.com/clayton-iliquin/software-MetalurgIA/blob/main/Imagenes/Metalurg_app.png',
+        "https://raw.githubusercontent.com/clayton-iliquin/software-MetalurgIA/blob/b8c1cc7fec5884a4c96ec3dfb2ba7c6462c70093/Imagenes/Hidrociclon.jpg",
         height =90)
 
 

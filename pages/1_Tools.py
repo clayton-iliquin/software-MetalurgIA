@@ -34,5 +34,5 @@ with col1:
     else:
         st.write("")
     
-    st.image('https://github.com/clayton-iliquin/software-MetalurgIA/blob/main/Imagenes/mill_chargue_level.jpg')
+    st.image('https://raw.githubusercontent.com/clayton-iliquin/software-MetalurgIA/blob/main/Imagenes/mill_chargue_level.jpg')
 
