@@ -48,8 +48,7 @@ with col2:
     
     st.divider()
 
-    st.image('https://raw.githubusercontent.com/clayton-iliquin/software-MetalurgIA/blob/main/Imagenes/Hidrociclon.jpg')
-
+    st.image("Imagenes\Hidrociclon.jpg")
 
 with col3:
     st.write('### OF Balance')

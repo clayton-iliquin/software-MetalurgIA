@@ -1,7 +1,8 @@
 import streamlit as st
 import time
 import numpy as np
-from Utilities import utilities as ut
+# from Utilities import utilities as ut
+from Utilities.utilities import logo
 
 st.set_page_config(
     page_title = 'Tools',
@@ -11,7 +12,7 @@ st.set_page_config(
 
 st.title("Fast Tools To Use:")
 
-ut.logo()
+logo()
 
 col1, col2, col3 = st.columns(3)
 
@@ -34,5 +35,5 @@ with col1:
     else:
         st.write("")
     
-    st.image('https://raw.githubusercontent.com/clayton-iliquin/software-MetalurgIA/blob/main/Imagenes/mill_chargue_level.jpg')
+    st.image("./Imagenes/mill_chargue_level.jpg")
 

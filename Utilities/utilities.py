@@ -1,9 +1,12 @@
 import streamlit as st
 from streamlit_extras.app_logo import add_logo
+from PIL import Image
 
 def logo():
+    path = "Imagenes/Metalurg_app.png"
+    #logo = Image.open(path)
     add_logo(
-        "https://raw.githubusercontent.com/clayton-iliquin/software-MetalurgIA/blob/b8c1cc7fec5884a4c96ec3dfb2ba7c6462c70093/Imagenes/Hidrociclon.jpg",
+        path,
         height =90)
 
 
