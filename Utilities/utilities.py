@@ -29,3 +29,13 @@ def grid_display(n_rows,list_data):
     for col, data in zip(cols,list_data):
         cont = col.container(height=50)
         cont.write(data)
+
+def solid_to_density(sepecific_graviti, percent_solid):
+    pulp_density = 1/((percent_solid/100)/sepecific_graviti + 1 - (percent_solid/100))
+
+    return pulp_density
+
+def density_to_solid(sepecific_graviti, pulp_density):
+    percent_solid = ((1/pulp_density)-1)/((1/sepecific_graviti)-1)*100
+
+    return percent_solid

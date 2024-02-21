@@ -48,7 +48,7 @@ with col2:
     
     st.divider()
 
-    st.image("Imagenes\Hidrociclon.jpg")
+    st.image("./Imagenes/Hidrociclon.jpg")
 
 with col3:
     st.write('### OF Balance')
