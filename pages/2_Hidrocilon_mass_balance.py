@@ -3,18 +3,18 @@ from Utilities import utilities as ut
 from Utilities import mass_balance as mb
 
 st.set_page_config(
-    page_title="Hidrociclon Mass Balance",
-    page_icon = "🌪",
-    layout = "wide"
+    page_title='Hidrociclon Mass Balance',
+    page_icon = '🌪️',
+    layout = 'wide'
 )
 
-st.title("Mass Balance")
+st.title('🌪️ Hidrociclon Mass Balance')
 ut.logo()
 col1, col2, col3 = st.columns(3)
 
 with col1:
     with st.form('Input_data'):
-        st.write('Enter de data')
+        st.write('Enter the data')
 
 
         feed_tms = st.number_input('Feed (Tons/hour): ',value = 550.56)
@@ -29,13 +29,13 @@ with col1:
         of_balance,uf_balance,feed_balance = mb.hidrociclon_balance(feed_tms,feed_rcc,feed_sg,uf_density,of_density)
 
     else:
-        of_balance,uf_balance,feed_balance =[["","","","",""],["","","","",""],["","","","",""]]
+        of_balance,uf_balance,feed_balance =[['','','','',''],['','','','',''],['','','','','']]
     
 
     st.divider()
 
     st.write('### Legend')
-    legend = ["TMS (ton/hr)","%Sol","TMA (ton/hr)","Density (Ton/m3)","TMP (Ton/hr)"]
+    legend = ['TMS (ton/hr)','%Sol','TMA (ton/hr)','Density (Ton/m3)','TMP (Ton/hr)']
     cols = ut.grid(2)
     for col, descr in zip(cols,legend):
         cont = col.container(height=45)
@@ -48,7 +48,7 @@ with col2:
     
     st.divider()
 
-    st.image("./Imagenes/Hidrociclon.jpg")
+    st.image('./Imagenes/Hidrociclon.jpg')
 
 with col3:
     st.write('### OF Balance')

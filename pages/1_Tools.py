@@ -19,7 +19,7 @@ col1, col2, col3 = st.columns(3)
 with col1:
 
     with st.form('Mill Chargue level'):
-        st.write('### Mill Chargue level')
+        st.write('### :one: Mill Chargue level')
 
         diameter = st.number_input('Efective diameter D (m): ', value = 3.4)
         height = st.number_input('Free Height H (m): ',value = 2.1)
@@ -41,7 +41,7 @@ with col2:
 
     with st.form('%Sol to Pulp Density'):
         
-        st.write('### % Solids to Pulp density')
+        st.write('### :two: % Solids to Pulp density')
 
         specific_gravity = st.number_input('Ore Specific Gravity:', value = 2.700 )
         percentaje_solids = st.number_input('%Solids (w/w): ', value = 30.000 )
@@ -55,7 +55,7 @@ with col2:
     
     with st.form('P.D. To %Sol'):
         
-        st.write('### Pulp density to % Solids')
+        st.write('### :three: Pulp density to % Solids')
 
         specific_gravity = st.number_input('Ore Specific Gravity:', value = 2.700)
         pulp_density = st.number_input('Pulp Density: ', value = 1.230)
@@ -71,7 +71,7 @@ with col2:
 with col3:
 
     with st.form('Fast Recuperation'):
-        st.write('### Metal Recovery')
+        st.write('### :four: Metal Recovery')
 
         calc_recovery = 0.00
         feed_law = st.number_input('Feed Assay(%): ', value = 2.09)
