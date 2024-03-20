@@ -1,7 +1,7 @@
 ![Metalurg_app](https://i.imgur.com/zKid8s0.png)
 # MetalurgIA Software
 
-This is an Open Source Software focus in Metallurgical applications, the object is to made a web app that can made very useful analisis, balances, simulations and reports for free no dependen from an desktop app.
+This is an Open Source Software focus on Metallurgical applications, the object is to make a web app that can make very useful analysis, balances, simulations and reports for free no dependence from a desktop app.
 
 - [MetalurgIA Software](#metalurgia-software)
   - [Usage](#usage)
@@ -13,21 +13,20 @@ This is an Open Source Software focus in Metallurgical applications, the object 
 You can use the app in this link from Streamlit App [link](https://software-metalurgia-demo.streamlit.app/).
 
 ## How to run localy
-If you want to contribute to this project you need to follow this steps:
-- Download and install **anaconda**, you know more about this [here](https://www.anaconda.com/download).
-- Clone this repositorie and create a virtual env to install the libraries in `requirements.txt`.
-- Activate the enviroment and use the comand `streamlit run Hello.py`.
-
-> __Important: ensure that you run the comand whitout ./ in front of the archive name__, this could cause and error in the application. 
+If you want to contribute to this project, you need to follow this step:
+- Download and install **anaconda**, you know more about this [here](https://www.anaconda.com/download)..
+- Clone this repository and create a virtual env to install the libraries in `requirements.txt`.
+- Activate the environment and use the command `streamlit run Hello.py`.
+> **Important: ensure that you run the command without ./ In front of the archive name**, this could cause an error in the application.
 
 ## How to Contribute
-Acctually the project is focus on create the most useful tools to metallurgical and process engineers, so the funcionalities like mass balances ins flotation and grinding need to be complete.
+Actually the project is focused on creating the most useful tools to metallurgical and process engineers, so the functionalities like mass balances for flotation and grinding circuts need to be complete.
 
-If you want to contribute please take a look of the pages already construct before. 
+If you want to contribute, please take a look of the pages have already constructed before.
 
-A simple guide for add an new tool:
-* Create the 'User Interface' for the app in the `pages` folder using streamlit. 
-* Create the varius calculus, dataframes and tools for this app in `utilites` folder, for made the app more mantainable.
+A simple guide to add a new tool:
+* Create the *User Interface* for the app in the `.\pages` folder using streamlit. 
+* Create the various calculus, dataframes and tools for this app in `.\utilities` folder, for making the app more maintainable.
 _____
 ## Contact
 If you know more about this project and help to this developmente please contate me: [LinkedIn Profile: Clayton Jhordan Iliquin Zavaleta](https://www.linkedin.com/in/clayton-jhordan-iliquin-zavaleta)
