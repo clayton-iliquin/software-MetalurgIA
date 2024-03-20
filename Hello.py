@@ -23,7 +23,7 @@ with col1:
     with st.container(border = True):
         st.write("**Calcs**")
         
-        st.page_link("/pages/1_Tools.py" ,label = """ 
+        st.page_link("pages/1_Tools.py" ,label = """ 
         #Tools:
         1️⃣ Mill Chargue Level.
         2️⃣ %Sol to Pulp Density
