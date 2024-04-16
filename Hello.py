@@ -36,11 +36,14 @@ with col1:
 with col2.container(border = True):
     st.write("**Mass Balance**")
     
-    st.page_link("pages/2_Hidrocilon_mass_balance.py" ,label = "Hidrociclon Balance", icon = "🌪️")
-    st.page_link("pages/3_Metallurgical_balance.py", label =  """
-    Mass Balance:
-    1️⃣ 1 Concen. - 1 Metal.
-    2️⃣ 2 Concen. - 2 Metals.
+    st.page_link("pages/2_Hidrocilon_mass_balance.py" ,label = """
+    Hidrociclon Mass Balance""",
+     icon = "🌪️")
+    st.page_link("pages/3_MB_1_Concentrate.py", label =  """
+    1️⃣ Mass Balance:1 Concen. - 1 Metal.
+    """, icon = "⚖️")
+    st.page_link("pages/4_MB_2_Concentrates.py", label =  """
+    2️⃣ Mass Balance:2 Concen. - 2 Metal.
     """, icon = "⚖️")
      
 
