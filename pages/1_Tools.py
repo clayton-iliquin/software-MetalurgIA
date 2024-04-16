@@ -29,7 +29,7 @@ with col1:
     
     
     if mill_chargue:
-        level = round((1.13 - 1.23*(height/diameter))*100,2)
+        level = ut.mill_chargue_level(height, diameter)
 
         st.write(f'Chargue level is {level} %')
     else:
@@ -81,9 +81,6 @@ with col3:
         recovery = st.form_submit_button('Calcualte')
 
     if recovery:
-        calc_recovery = round(
-            100*(concentrate_law*(feed_law - tail_law))/(feed_law*(concentrate_law - tail_law))
-            ,2)
-        
+        calc_recovery = ut.calc_recovery(feed_law, tail_law, concentrate_law)
         st.write(f'Metal Recovery: {calc_recovery} %')
 
