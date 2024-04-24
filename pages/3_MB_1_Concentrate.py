@@ -24,18 +24,18 @@ ut.logo()
 
 
 st.write('### One Concentrate Balance')
-data, display =  st.columns([0.35,0.65])
-with data:
 
-    with st.container(border = True):
-        st.write('Enter the data: ')
-        
+with st.container(border = True):
+    mineral, feed, laws = st.columns(3)
+    
+    with mineral:
         with st.container(border = True):
             st.caption('Mineral')
             
             feed_ton = st.number_input('Feed (Ton): ', value = 150.00)
             feed_humidity = st.number_input('Humidity (%): ', value = 2.00)
 
+    with feed: 
         with st.container(border = True):
             st.caption('Feed')
 
@@ -44,7 +44,8 @@ with data:
             law = sep2.selectbox('Choose:',['%','Oz/Tn'],key = 'law')
             
             element_1 = st.selectbox('Element:',('Cu','Au','Ag','Pb','Zn','Sn'),key = 'element_1')
-
+    
+    with laws:
         with st.container(border = True):
             st.caption('Concentrate')
             conc_law = st.number_input(f'Concentrate Law {st.session_state.law} : ', value = 20.3)
@@ -53,20 +54,22 @@ with data:
             st.caption('Tail')
             tail_law = st.number_input(f'Tail Law {st.session_state.law} : ', value = 0.20)
 
+chart = mb.mass_balance_1_conc_1_elemet_chart(st.session_state.element_1, st.session_state.law)
+rec = float()
 
-        
-        balance_1_conc = st.button('Excecute Balance')
-        
-        chart = mb.mass_balance_1_conc_1_elemet_chart(st.session_state.element_1, st.session_state.law)
-        rec = float()
-        if balance_1_conc:
-            mb.mass_balance_1_conc_1_element_calc(feed_ton, feed_humidity,feed_law,conc_law,tail_law,chart)
-            st.session_state.recovery = ut.calc_recovery(feed_law, tail_law, conc_law)
+but_1, but_2 = st.columns(2)
 
-        
-        
-with display:
-        st.dataframe(data =chart, hide_index = True)
-        
-        with st.container(border = True):
-            st.write(f"Recuperation of {st.session_state.element_1} is : {st.session_state.recovery} %")
+balance_1_conc = but_1.button('Excecute Balance', use_container_width = True)
+clear_1_conc = but_2.button('Clear Data', use_container_width = True)
+
+if balance_1_conc:
+    mb.mass_balance_1_conc_1_element_calc(feed_ton, feed_humidity,feed_law,conc_law,tail_law,chart)
+    st.session_state.recovery = ut.calc_recovery(feed_law, tail_law, conc_law)
+
+if clear_1_conc:
+    chart.iloc[:,1:] = ' '
+
+st.dataframe(data =chart, hide_index = True)
+
+with st.container(border = True):
+    st.write(f"Recuperation of {st.session_state.element_1} is : {st.session_state.recovery} %")

@@ -81,13 +81,16 @@ with st.container(border = True):
 
 
 but1, but2 = st.columns(2)
-balance_2_conc = but1.button('Excecute Balance', use_container_width = True)
-report_mb_2_conc = but2.button('Download Report', use_container_width = True)
+balance_3_conc = but1.button('Excecute Balance', use_container_width = True)
+clear_mb_3_conc = but2.button('Clear Data', use_container_width = True)
 
-if balance_2_conc:
+if balance_3_conc:
     mb.mass_balance_3_conc_3_elemet_calc(mb3_feed_ton, feed_law_1,feed_law_2,feed_law_3,
     conc_1_law_1, conc_1_law_2,conc_1_law_3, conc_2_law_1, conc_2_law_2, conc_2_law_3,
     conc_3_law_1, conc_3_law_2, conc_3_law_3, tail_law_1, tail_law_2, tail_law_3, chart)
+
+if clear_mb_3_conc:
+    chart.iloc[:,1:] = ''
 
 with st.container(border = True):
     
