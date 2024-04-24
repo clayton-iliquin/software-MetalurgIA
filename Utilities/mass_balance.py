@@ -95,15 +95,25 @@ def mass_balance_2_conc_2_elemet_chart(element_1,element_2,law_1,law_2):
                         'Ratio':['','','','']})
     return tabular 
 
-def solve(a,b):
+def solve_matrix(a,b):
+    """
+    Returns
+    x -> array contain the solution of a^(-1)*b
+    a -> matrix clean to use for mass_balance_n_conc_n_element_calc.
+
+    """
+    # calc x = a^(-1)*b use function
     if np.linalg.det(a) == 0:
         x = None
     else:
         x = np.linalg.solve(a,b)
     
+    # matriz a transpose to use in chart 
     a = np.transpose(a)
     a = a[:,1:]
-    x = np.reshape(x,3)
+
+    # matriz x reshape to 1 row and x columns
+    x = np.reshape(x,(1,-1))
     return a, x
 
 def mass_balance_2_conc_2_elemet_calc(feed_ton, feed_humidity,feed_law_1, feed_law_2, conc_1_law_1, conc_1_law_2, conc_2_law_1, conc_2_law_2,tail_law_1,tail_law_2,chart):
@@ -120,7 +130,7 @@ def mass_balance_2_conc_2_elemet_calc(feed_ton, feed_humidity,feed_law_1, feed_l
     [conc_1_law_2,conc_2_law_2,tail_law_2]])
     b = np.array([1,feed_law_1,feed_law_2])
     
-    a,x = solve(a,b)
+    a,x = solve_matrix(a,b)
     
     #asing the data in a the chart. 
     chart.iloc[0,1] = feed_tons_dry
@@ -141,3 +151,68 @@ def mass_balance_2_conc_2_elemet_calc(feed_ton, feed_humidity,feed_law_1, feed_l
 
     chart.iloc[1,8] = chart.iloc[0,1]/chart.iloc[1,1]
     chart.iloc[2,8] = chart.iloc[0,1]/chart.iloc[2,1]
+
+
+def mass_balance_3_conc_3_elemet_chart(element_1,element_2,element_3,law_1,law_2,law_3):
+    """
+    Create a matrix to display in Metallurgycal Balance App for 3 concentrates.
+    """
+    tabular = pd.DataFrame({'Stream':['Feed',f'Concentrate {element_1}',f'Concentrate {element_2}',f'Concentrate {element_3}','Tail'],
+                        'Mass of Stream (Ton)':['','','','',''],
+                        f'{element_1} Assay ({law_1})':['','','','',''],
+                        f'{element_2} Assay ({law_2})':['','','','',''],
+                        f'{element_3} Assay ({law_3})':['','','','',''],
+                        f'Mass of {element_1}':['','','','',''],
+                        f'Mass of {element_2}':['','','','',''],
+                        f'Mass of {element_3}':['','','','',''],
+                        f'% Distribution {element_1}':['','','','',''],
+                        f'% Distribution {element_2}':['','','','',''],
+                        f'% Distribution {element_3}':['','','','',''],
+                        'Ratio':['','','','','']})
+    return tabular 
+
+
+
+
+def mass_balance_3_conc_3_elemet_calc(feed_ton, feed_law_1, feed_law_2,feed_law_3, 
+    conc_1_law_1, conc_1_law_2, conc_1_law_3, conc_2_law_1, conc_2_law_2, conc_2_law_3,
+    conc_3_law_1, conc_3_law_2, conc_3_law_3,tail_law_1,tail_law_2, tail_law_3, chart):
+    """ 
+    Generate the necesary calcs to excecute the mass balance of 3 conc and load the
+    values in mass_balance_3_conc_3_element_chart.
+
+    Use the linear algoritm solve using matrix to solve.
+    X = a^(-1)*b
+    """
+    a = np.array([[1,1,1,1],
+    [conc_1_law_1,conc_2_law_1,conc_3_law_1,tail_law_1],
+    [conc_1_law_2,conc_2_law_2,conc_3_law_2,tail_law_2],
+    [conc_1_law_3,conc_2_law_3,conc_3_law_3,tail_law_3]])
+
+    b = np.array([1,feed_law_1,feed_law_2,feed_law_3])
+    
+    a,x = solve_matrix(a,b)
+    
+    #asing the data in a the chart. 
+    chart.iloc[0,1] = feed_ton
+    chart.iloc[[1,2,3,4],1] = x*feed_ton
+
+    chart.iloc[0,2] = feed_law_1
+    chart.iloc[0,3] = feed_law_2
+    chart.iloc[0,4] = feed_law_3
+    chart.iloc[[1,2,3,4],[2,3,4]] = a
+
+    chart.iloc[:,5] =  chart.iloc[:,1]* chart.iloc[:,2]/100
+    chart.iloc[:,6]=  chart.iloc[:,1]* chart.iloc[:,3]/100
+    chart.iloc[:,7]=  chart.iloc[:,1]* chart.iloc[:,4]/100
+    
+    chart.iloc[0,[8,9,10]] = 100
+  
+
+    chart.iloc[[1,2,3,4],8] = chart.iloc[[1,2,3,4],5]/chart.iloc[0,5]*100
+    chart.iloc[[1,2,3,4],9] = chart.iloc[[1,2,3,4],6]/chart.iloc[0,6]*100
+    chart.iloc[[1,2,3,4],10] = chart.iloc[[1,2,3,4],7]/chart.iloc[0,7]*100
+
+    chart.iloc[1,11] = chart.iloc[0,1]/chart.iloc[1,1]
+    chart.iloc[2,11] = chart.iloc[0,1]/chart.iloc[2,1]
+    chart.iloc[3,11] = chart.iloc[0,1]/chart.iloc[3,1]
