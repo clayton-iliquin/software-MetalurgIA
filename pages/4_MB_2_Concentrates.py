@@ -3,6 +3,11 @@ import pandas as pd
 from Utilities import utilities as ut
 from Utilities import mass_balance as mb
 
+@st.cache_data
+def convert_df(df):
+    # IMPORTANT: Cache the conversion to prevent computation on every rerun
+
+    return df.to_excel('mass_balanace_2_conc.xlsx', index = False,float_format=",.3f")
 
 
 st.set_page_config(
@@ -69,8 +74,9 @@ with st.container(border = True):
 
 
 but1, but2 = st.columns(2)
-balance_2_conc = but1.button('Excecute Balance', use_container_width = True)
-report_mb_2_conc = but2.button('Download Report', use_container_width = True)
+balance_2_conc = but1.button('Excecute Balance', use_container_width = True, type = 'primary')
+report_mb_2_conc = but2.button('Download Report', use_container_width = True, disabled = True)
+
 
 if balance_2_conc:
     mb.mass_balance_2_conc_2_elemet_calc(c2_feed_ton,c2_feed_humidity,feed_law_1,feed_law_2,conc_1_law_1,
@@ -79,3 +85,7 @@ if balance_2_conc:
 with st.container(border = True):
     
     st.dataframe(data = chart, hide_index = True, use_container_width = True)
+
+# report_mb_2_conc = st.download_button('Download Report',data = convert_df(chart),
+#                                     use_container_width = True,file_name='template.xlsx',
+#                                      mime = 'application/octet-stream')
