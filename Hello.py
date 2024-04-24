@@ -45,6 +45,9 @@ with col2.container(border = True):
     st.page_link("pages/4_MB_2_Concentrates.py", label =  """
     2️⃣ Mass Balance:2 Concen. - 2 Metal.
     """, icon = "⚖️")
+    st.page_link("pages/5_MB_3_Concentrates.py", label =  """
+    3️⃣ Mass Balance:3 Concen. - 3 Metal.
+    """, icon = "⚖️")
      
 
 
