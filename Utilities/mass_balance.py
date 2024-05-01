@@ -3,8 +3,8 @@ import numpy as np
 
 def hidrociclon_balance(feed_tms,feed_rcc,feed_sg,uf_density,of_density):
     """
-    This function calculate the mass balance in an hidrociclon, generate three list of
-    five elements heach one (TMS, % soldis, TMA, density,TMP) for flows of OF, UF and Feed.
+    This function calculate the mass balance in an hydrociclon, generate three list of
+    five elements heach one (TMS, % solids, TMA, density,TMP) for flows of OF, UF and Feed.
     """
 
     # OF Balance
@@ -41,7 +41,7 @@ def hidrociclon_balance(feed_tms,feed_rcc,feed_sg,uf_density,of_density):
         
 def mass_balance_1_conc_1_elemet_chart(element,law):
     """
-    Create a matrix to display in Metallurgycal Balance App
+    Create a matrix to display in Metallurgical Balance App
     """
     tabular = pd.DataFrame({'Stream':['Feed','Concentrate','Tail'],
                         'Mass of Stream (Ton)':['','',''],
@@ -54,15 +54,15 @@ def mass_balance_1_conc_1_elemet_chart(element,law):
 
 def mass_balance_1_conc_1_element_calc(feed_ton, feed_humidity,feed_law,conc_law,tail_law,chart):
     """ 
-    Generate the necesary calcs to excecute the mass balance of 1 conc and load the
-    values in mass_balance_1_conc_1_element_chart.
+    Responsible for generating the necessary calculations to execute the mass balance
+    of 1 conc and load the values in mass_balance_1_conc_1_element_chart.
     """
     feed_tons_dry = feed_ton*((100-feed_humidity)/100)
     conc_ratio = (feed_law-tail_law)/(conc_law-tail_law)
     conc_tons_dry = feed_tons_dry*conc_ratio
     tail_tons_dry = feed_tons_dry - conc_ratio
 
-    #asing the data in a the chart. 
+    #entering data in a the chart. 
     chart.iloc[0,1] = float(feed_tons_dry)
     chart.iloc[1,1] = float(conc_tons_dry)
     chart.iloc[2,1] = float(tail_tons_dry)
@@ -82,7 +82,7 @@ def mass_balance_1_conc_1_element_calc(feed_ton, feed_humidity,feed_law,conc_law
 
 def mass_balance_2_conc_2_elemet_chart(element_1,element_2,law_1,law_2):
     """
-    Create a matrix to display in Metallurgycal Balance App
+    Create a matrix to display in Metallurgical Balance App
     """
     tabular = pd.DataFrame({'Stream':['Feed',f'Concentrate {element_1}',f'Concentrate {element_2}','Tail'],
                         'Mass of Stream (Ton)':['','','',''],
@@ -108,20 +108,20 @@ def solve_matrix(a,b):
     else:
         x = np.linalg.solve(a,b)
     
-    # matriz a transpose to use in chart 
+    # matrix a transpose to use in chart 
     a = np.transpose(a)
     a = a[:,1:]
 
-    # matriz x reshape to 1 row and x columns
+    # matrix x reshape to 1 row and x columns
     x = np.reshape(x,(1,-1))
     return a, x
 
 def mass_balance_2_conc_2_elemet_calc(feed_ton, feed_humidity,feed_law_1, feed_law_2, conc_1_law_1, conc_1_law_2, conc_2_law_1, conc_2_law_2,tail_law_1,tail_law_2,chart):
     """ 
-    Generate the necesary calcs to excecute the mass balance of 2 conc and load the
-    values in mass_balance_2_conc_2_element_chart.
+    Responsible for generating the necessary calculations for the mass balance 
+    of 2 conc and load the values in mass_balance_2_conc_2_element_chart.
 
-    Use the linear algoritm solve using matrix to solve.
+    Use the linear algorithm solve using matrix to solve.
     X = a^(-1)*b
     """
     feed_tons_dry = feed_ton*((100-feed_humidity)/100)
@@ -132,7 +132,7 @@ def mass_balance_2_conc_2_elemet_calc(feed_ton, feed_humidity,feed_law_1, feed_l
     
     a,x = solve_matrix(a,b)
     
-    #asing the data in a the chart. 
+    # entering data in a the chart. 
     chart.iloc[0,1] = feed_tons_dry
     chart.iloc[[1,2,3],1] = x*feed_tons_dry
 
@@ -178,10 +178,10 @@ def mass_balance_3_conc_3_elemet_calc(feed_ton, feed_law_1, feed_law_2,feed_law_
     conc_1_law_1, conc_1_law_2, conc_1_law_3, conc_2_law_1, conc_2_law_2, conc_2_law_3,
     conc_3_law_1, conc_3_law_2, conc_3_law_3,tail_law_1,tail_law_2, tail_law_3, chart):
     """ 
-    Generate the necesary calcs to excecute the mass balance of 3 conc and load the
-    values in mass_balance_3_conc_3_element_chart.
+    Responsible for generating the necessary calculations to execute the mass balance
+    of 3 conc and load the values in mass_balance_3_conc_3_element_chart.
 
-    Use the linear algoritm solve using matrix to solve.
+    Use the linear algorithm solve using matrix to solve.
     X = a^(-1)*b
     """
     a = np.array([[1,1,1,1],
@@ -216,3 +216,90 @@ def mass_balance_3_conc_3_elemet_calc(feed_ton, feed_law_1, feed_law_2,feed_law_
     chart.iloc[1,11] = chart.iloc[0,1]/chart.iloc[1,1]
     chart.iloc[2,11] = chart.iloc[0,1]/chart.iloc[2,1]
     chart.iloc[3,11] = chart.iloc[0,1]/chart.iloc[3,1]
+
+
+class DirectGrinding():
+    
+    def __init__(self):
+        pass
+
+    def circulating_load_sol_method(self, sol_over, sol_under,sol_feed):
+        """
+        Return CC base on %sol hydrocyclon in feed, over and under streams.
+        Transforms in to dilution rate each one and return a Circulating load
+        in integers.
+        """
+        cc = (1/sol_over-1/sol_feed)/(1/sol_feed - 1/sol_under)
+
+        return cc
+
+    def chart_balance(self):
+        """
+        Chart use to show data of mass balance in grinding circuits.
+        """
+
+        tabular = pd.DataFrame({'Characteristic':['Ore (ton/hr)','Water (m3/hr)','Slurry (ton/hr)','Slurry (m3/hr)','Density (ton/m3)','%Solids (v/v)','%Solids (w/w)'],
+        'Fresh Feed' : ['','','','','','',''],
+        'Mill Feed': ['','','','','','',''],
+        'Mill Discharge' : ['','','','','','',''],
+        'Sump Water' : ['','','','','','',''],
+        'Cyclon Feed' : ['','','','','','',''],
+        'Cyclon U\' flow' : ['','','','','','',''],
+        'Cyclon O\' flow' : ['','','','','','','']
+        })
+
+        return tabular
+
+    def mass_balance_direct_circuit(self, fresh_feed, moisture,specific_gravity,over_sol,under_sol,feed_sol, chart):
+        """
+        This function recives:
+        (fresh_feed = ton/hr, Moisture = %,Specific gravity, over_sol = %Sol in OverFlow of hidrocyclon
+        under_sol = %Sol in UnderFlow of hidrocyclon, feed_sol = %Sol in Feed of hidrocyclon)
+
+        And Returns the solution in the chart
+        """
+        # for Fresh Feed
+
+        chart.iloc[0,1] = fresh_feed*(100-moisture)/100
+        chart.iloc[2,1] = fresh_feed
+        chart.iloc[1,1] = chart.iloc[2,1]-chart.iloc[0,1]
+        chart.iloc[3,1] = chart.iloc[0,1]/specific_gravity + chart.iloc[1,1]
+        # chart.iloc[4,1] = chart.iloc[2,1]/ chart.iloc[3,1]
+        # chart.iloc[5,1] = chart.iloc[0,1]/specific_gravity/chart.iloc[3,1]*100
+        chart.iloc[6,1] = chart.iloc[0,1]/chart.iloc[2,1]*100
+
+        #for Overflow
+
+        chart.iloc[0,7] = chart.iloc[0,1] # Ore ton/h
+        chart.iloc[6,7] = over_sol # sol (w/w)
+        chart.iloc[2,7] = chart.iloc[0,7]/chart.iloc[6,7] *100 #Slurty ton/h
+        chart.iloc[1,7] = chart.iloc[2,7]-chart.iloc[0,7] # Wtaer m3/h
+        chart.iloc[3,7] = chart.iloc[0,7]/specific_gravity + chart.iloc[1,7] #slurry m3/h
+        # chart.iloc[4,7] = chart.iloc[2,7]/chart.iloc[3,7] # Densi ton/m3
+        # chart.iloc[5,7] = chart.iloc[0,7]/specific_gravity/chart.iloc[3,7]*100 # %Sol(v/v)
+        
+        # Circulating Charge
+        cc = self.circulating_load_sol_method(over_sol, under_sol, feed_sol)
+        
+        # for UnderFlow
+
+        chart.iloc[0,6] = chart.iloc[0,7]*cc # Oren Ton/h
+        chart.iloc[6,6] = under_sol # %sol (w/w)
+        chart.iloc[2,6] =  chart.iloc[0,6]/chart.iloc[6,6]*100 #Slurty ton/h
+        chart.iloc[1,6] = chart.iloc[2,6]-chart.iloc[0,6] # Wtaer m3/h
+        chart.iloc[3,6] = chart.iloc[0,6]/specific_gravity + chart.iloc[1,6] #slurry m3/h
+        # chart.iloc[4,6] = chart.iloc[2,6]/chart.iloc[3,6] # Densi ton/m3
+        # chart.iloc[5,6] = chart.iloc[0,6]/specific_gravity/chart.iloc[3,6]*100 # %Sol(v/v)
+
+        # mill feed (Underflow + Fress feed)
+
+        chart.iloc[0:4,2] = chart.iloc[0:4,6] + chart.iloc[0:4,1] # Ore, slury ton/h and m3/h
+        chart.iloc[6,2] = chart.iloc[0,2]/chart.iloc[2,2]*100
+
+        # mill dischargue 
+        chart.iloc[0,3] = chart.iloc[0,2]# Oren Ton/h
+        #chart.iloc[6,6] = under_sol # %sol (w/w)
+
+        # cyclone feed 
+        chart.iloc[0,5] = chart.iloc[0,2] # Oren Ton/h
+        chart.iloc[1:4,5] = chart.iloc[1:4,6] + chart.iloc[1:4,7]
