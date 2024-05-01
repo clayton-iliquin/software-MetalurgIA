@@ -74,7 +74,7 @@ with st.container(border = True):
 
 
 but1, but2 = st.columns(2)
-balance_2_conc = but1.button('Excecute Balance', use_container_width = True, type = 'primary')
+balance_2_conc = but1.button('Execute Balance', use_container_width = True, type = 'primary')
 clear_mb_2_conc = but2.button('Clear data', use_container_width = True)
 
 

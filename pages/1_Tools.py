@@ -18,10 +18,10 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
 
-    with st.form('Mill Chargue level'):
-        st.write('### :one: Mill Chargue level')
+    with st.form('Mill Charge level'):
+        st.write('### :one: Mill Charge level')
 
-        diameter = st.number_input('Efective diameter D (m): ', value = 3.4)
+        diameter = st.number_input('Effective diameter D (m): ', value = 3.4)
         height = st.number_input('Free Height H (m): ',value = 2.1)
 
         mill_chargue = st.form_submit_button('Calculate')
@@ -31,7 +31,7 @@ with col1:
     if mill_chargue:
         level = ut.mill_chargue_level(height, diameter)
 
-        st.write(f'Chargue level is {level} %')
+        st.write(f'Charge level is {level} %')
     else:
         st.write("")
     
@@ -51,7 +51,7 @@ with col2:
     if solid_to_density:
         pulp_density_calc = round(ut.solid_to_density(specific_gravity,percentaje_solids),2)
 
-        st.write(f"Pulp Desnity: {pulp_density_calc}")
+        st.write(f"Pulp Density: {pulp_density_calc}")
     
     with st.form('P.D. To %Sol'):
         
@@ -78,7 +78,7 @@ with col3:
         concentrate_law = st.number_input('Concentrate Assay(%): ', value = 20.0)
         tail_law = st.number_input('Tail Assay(%): ', value = 0.1)
 
-        recovery = st.form_submit_button('Calcualte')
+        recovery = st.form_submit_button('Calculate')
 
     if recovery:
         calc_recovery = ut.calc_recovery(feed_law, tail_law, concentrate_law)

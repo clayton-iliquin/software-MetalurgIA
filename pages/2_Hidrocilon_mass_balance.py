@@ -3,12 +3,12 @@ from Utilities import utilities as ut
 from Utilities import mass_balance as mb
 
 st.set_page_config(
-    page_title='Hidrociclon Mass Balance',
+    page_title='Hydrocyclon Mass Balance',
     page_icon = '🌪️',
     layout = 'wide'
 )
 
-st.title('🌪️ Hidrociclon Mass Balance')
+st.title('🌪️ Hydrocyclon Mass Balance')
 ut.logo()
 col1, col2, col3 = st.columns(3)
 
@@ -23,9 +23,9 @@ with col1:
         uf_density = st.number_input ('U/F density',value = 1.43)
         of_density = st.number_input ('O/F density',value = 1.14)
 
-        excecute = st.form_submit_button('Excecute')
+        execute = st.form_submit_button('Execute')
 
-    if excecute:
+    if execute:
         of_balance,uf_balance,feed_balance = mb.hidrociclon_balance(feed_tms,feed_rcc,feed_sg,uf_density,of_density)
 
     else:

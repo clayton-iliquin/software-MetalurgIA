@@ -81,7 +81,7 @@ with st.container(border = True):
 
 
 but1, but2 = st.columns(2)
-balance_3_conc = but1.button('Excecute Balance', use_container_width = True)
+balance_3_conc = but1.button('Execute Balance', use_container_width = True)
 clear_mb_3_conc = but2.button('Clear Data', use_container_width = True)
 
 if balance_3_conc:
