@@ -29,6 +29,7 @@ with st.container(border = True):
         over_sol = st.number_input('%Sol Overflow Cyclon: ', value = 40.00)
         under_sol = st.number_input('%Sol Underflow Cyclon: ', value = 76.00)
         feed_sol = st.number_input('%Sol Feed Cyclon: ', value = 62.2)
+        discharge_sol = st.number_input('%Sol Mill Discharge: ', value = 72.00)
 
 direct_circuit = mb.DirectGrinding()
 chart = direct_circuit.chart_balance()
@@ -40,7 +41,7 @@ with st.container(border=True):
     clear_direct_circuit = but_2.button('Clear Data', use_container_width = True)
 
     if balance_direct_circuit:
-        direct_circuit.mass_balance_direct_circuit(fresh_charge,moisture,spec_grav, over_sol,under_sol,feed_sol,chart)
+        direct_circuit.mass_balance_direct_circuit(fresh_charge,moisture,spec_grav, over_sol,under_sol,feed_sol,discharge_sol,chart)
         
     if clear_direct_circuit:
         chart.iloc[:,1:] = ' '
