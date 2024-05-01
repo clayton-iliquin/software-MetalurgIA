@@ -25,39 +25,46 @@ with col1:
         
         st.page_link("pages/1_Tools.py" ,label = """ 
         #Tools:
-        1️⃣ Mill Chargue Level.
+        1️⃣ Mill Charge Level.
         2️⃣ %Sol to Pulp Density
         3️⃣ Pulp Density to %Sol
         4️⃣ Recovery Calc""", 
         icon = "🧰",
         use_container_width = False)
-        
+    
+    with st.container(border = True):
+        st.write("**Mass Balance**")
+        st.page_link("pages/2_Hidrocilon_mass_balance.py" ,label = """
+        Hydrocyclon Mass Balance""",
+        icon = "🌪️")
+        st.page_link("pages/6_MB_Direct_Grinding_Circuit.py",
+        label = """
+        Direct Circuit Mass Balance
+        """,
+        icon = "🌊")
 
 with col2.container(border = True):
-    st.write("**Mass Balance**")
-    
-    st.page_link("pages/2_Hidrocilon_mass_balance.py" ,label = """
-    Hidrociclon Mass Balance""",
-     icon = "🌪️")
+    st.write("**Metallurgical Balance**")
+
     st.page_link("pages/3_MB_1_Concentrate.py", label =  """
-    1️⃣ Mass Balance:1 Concen. - 1 Metal.
+    1️⃣ Mass Balance: Two products  
     """, icon = "⚖️")
     st.page_link("pages/4_MB_2_Concentrates.py", label =  """
-    2️⃣ Mass Balance:2 Concen. - 2 Metal.
+    2️⃣ Mass Balance: Three products
     """, icon = "⚖️")
     st.page_link("pages/5_MB_3_Concentrates.py", label =  """
-    3️⃣ Mass Balance:3 Concen. - 3 Metal.
+    3️⃣ Mass Balance: Four products 
     """, icon = "⚖️")
      
 
 
 st.markdown(
     """
-    This is a Demo for the use of Metalurgical Aplications in web browser.
+    This is a Demo for the use of Metallurgical Applications in web browser.
 
 
     ### About Us
-    - Take a Look of our block (Espanish) [Metarlurg.IA Blog](https://metalurg-ia.blogspot.com/).
+    - Take a Look of our block (Spanish) [Metarlurg.IA Blog](https://metalurg-ia.blogspot.com/).
     - Our LinkedIn Profiles:
         - [Clayton Jhordan Iliquin Zavaleta](https://www.linkedin.com/in/clayton-jhordan-iliquin-zavaleta/)
 
