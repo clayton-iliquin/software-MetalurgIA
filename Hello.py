@@ -39,7 +39,12 @@ with col1:
         icon = "🌪️")
         st.page_link("pages/6_MB_Direct_Grinding_Circuit.py",
         label = """
-        Direct Circuit Mass Balance
+        ➡️ Direct Circuit Mass Balance
+        """,
+        icon = "🌊")
+        st.page_link("pages/7_MB_Reverse_Grinding_Circuit.py",
+        label = """
+        ⬅️ Reverse Circuit Mass Balance
         """,
         icon = "🌊")
 

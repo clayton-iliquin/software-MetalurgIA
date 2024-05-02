@@ -14,7 +14,7 @@ st.set_page_config(
 # if 'law_1_mb_3' not in st.session_state:
 #     st.session_state.law_1_mb_3 = '%'
 
-st.title('🌊  Mass Balance Direct Grinding Circuit')
+st.title('🌊➡️  Mass Balance Direct Grinding Circuit')
 ut.logo()
 
 with st.container(border = True):
