@@ -318,6 +318,82 @@ class DirectGrinding():
         chart.iloc[2:4,5] = chart.iloc[1,5]
         # Density 
         chart.iloc[4,1:] = chart.iloc[2,1:]/chart.iloc[3,1:]
+        # %Sol (v/v)
+        chart.iloc[5,1:] = (chart.iloc[0,1:]/specific_gravity)/chart.iloc[3,1:]*100
 
-        chart.iloc[5,1:] = (chart.iloc[0,1:]/specific_gravity)/chart.iloc[3,1:]
+
+class ReverseGrinding(DirectGrinding):
+    def __init__(self):
+        pass
+
+    # I understood that this is not a good solution because only 3 cols 
+    # change some calcs, but is the way that I know.
+    def mass_balance_reverse_circuit(self, fresh_feed, moisture,specific_gravity,over_sol,under_sol,feed_sol,discharge_sol, chart):
+        """
+        This function recives:
+        (fresh_feed = ton/hr, Moisture = %,Specific gravity, over_sol = %Sol in OverFlow of hidrocyclon
+        under_sol = %Sol in UnderFlow of hidrocyclon, feed_sol = %Sol in Feed of hidrocyclon,
+        discharge_sol = %Sol in discharge of Mill)
+
+        And Returns the solution in the chart
+        """
+        # for Fresh Feed
+
+        chart.iloc[0,1] = fresh_feed*(100-moisture)/100
+        chart.iloc[2,1] = fresh_feed
+        chart.iloc[1,1] = chart.iloc[2,1]-chart.iloc[0,1]
+        chart.iloc[3,1] = chart.iloc[0,1]/specific_gravity + chart.iloc[1,1]
+        chart.iloc[6,1] = chart.iloc[0,1]/chart.iloc[2,1]*100
+
+        #for Overflow
+
+        chart.iloc[0,8] = chart.iloc[0,1] # Ore ton/h
+        chart.iloc[6,8] = over_sol # sol (w/w)
+        chart.iloc[2,8] = chart.iloc[0,8]/chart.iloc[6,8] *100 #Slurty ton/h
+        chart.iloc[1,8] = chart.iloc[2,8]-chart.iloc[0,8] # Wtaer m3/h
+        chart.iloc[3,8] = chart.iloc[0,8]/specific_gravity + chart.iloc[1,8] #slurry m3/h
         
+        # Circulating Charge
+        cc = self.circulating_load_sol_method(over_sol, under_sol, feed_sol)
+        
+        # for UnderFlow
+
+        chart.iloc[0,7] = chart.iloc[0,8]*cc # Oren Ton/h
+        chart.iloc[6,7] = under_sol # %sol (w/w)
+        chart.iloc[2,7] =  chart.iloc[0,7]/chart.iloc[6,7]*100 #Slurty ton/h
+        chart.iloc[1,7] = chart.iloc[2,7]-chart.iloc[0,7] # Wtaer m3/h
+        chart.iloc[3,7] = chart.iloc[0,7]/specific_gravity + chart.iloc[1,7] #slurry m3/h
+       
+
+        # mill feed (Underflow + Fress feed)
+
+        chart.iloc[:,2] = chart.iloc[:,7] # Ore, slury ton/h and m3/h
+        
+
+        # mill discharge 
+        chart.iloc[0,4] = chart.iloc[0,2]# Oren Ton/h
+        chart.iloc[6,4] = discharge_sol # %sol (w/w)
+        chart.iloc[2,4] = chart.iloc[0,4]/discharge_sol*100 #Slurry ton/h
+        chart.iloc[1,4] = chart.iloc[2,4] - chart.iloc[0,4] # Water Slurry m3/h
+        chart.iloc[3,4] = chart.iloc[0,4]/specific_gravity + chart.iloc[1,4] #Slurry m3/h
+
+        # cyclone feed 
+        chart.iloc[0,6] =  chart.iloc[0,7] + chart.iloc[0,8] # Oren Ton/h
+        chart.iloc[1:4,6] = chart.iloc[1:4,7] + chart.iloc[1:4,8]
+        chart.iloc[6,6] = feed_sol
+
+        # water to Mill
+        chart.iloc[0,3] = 0.0 # Ore Ton/h
+        chart.iloc[6,3] = 0.0 # %Sol (w/w)
+        chart.iloc[1,3] = chart.iloc[1,4]-chart.iloc[1,2]
+        chart.iloc[2:4,3] = chart.iloc[1,3]
+
+        # water to mill discharge
+        chart.iloc[0,5] = 0.0 # Ore Ton/h
+        chart.iloc[6,5] = 0.0 # %Sol (w/w)
+        chart.iloc[1,5] = chart.iloc[1,8] - chart.iloc[1,1]-(chart.iloc[1,4]-chart.iloc[1,2])
+        chart.iloc[2:4,5] = chart.iloc[1,5]
+        # Density 
+        chart.iloc[4,1:] = chart.iloc[2,1:]/chart.iloc[3,1:]
+        # %Sol (v/v)
+        chart.iloc[5,1:] = (chart.iloc[0,1:]/specific_gravity)/chart.iloc[3,1:]*100
