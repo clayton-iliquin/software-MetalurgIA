@@ -2,7 +2,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 class DrawBalances:
     def __init__(self):
-        self.font = "arial.ttf"
+        self.font = "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSerif.ttf"
         self.font_size = 14
         self.space = 6
 
@@ -16,8 +16,11 @@ class DrawBalances:
         image = Image.open(image)
         draw = ImageDraw.Draw(image)
 
-        font = ImageFont.truetype(self.font,self.font_size)
-
+        try: 
+            font = ImageFont.truetype(self.font,self.font_size)
+        except:
+            font = ImageFont.truetype("arial.ttf",self.font_size)
+        
         # Values for Fresh feed
         draw.multiline_text((90, 405), f"{chart.iloc[0,1]:,.2f}\n{chart.iloc[3,1]:,.2f}\n{chart.iloc[6,1]:.2f} ", font=font, fill="black", align = "right",spacing = self.space)
 
@@ -55,8 +58,11 @@ class DrawBalances:
         """
         image = Image.open(image)
         draw = ImageDraw.Draw(image)
-
-        font = ImageFont.truetype(self.font,self.font_size)
+        
+        try: 
+            font = ImageFont.truetype(self.font,self.font_size)
+        except:
+            font = ImageFont.truetype("arial.ttf",self.font_size)
 
         # Values for Fresh feed
         draw.multiline_text((85, 195), f"{chart.iloc[0,1]:,.2f}\n{chart.iloc[3,1]:,.2f}\n{chart.iloc[6,1]:.2f} ", font=font, fill="black", align = "right",spacing = self.space)
