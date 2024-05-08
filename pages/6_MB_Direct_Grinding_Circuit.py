@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 from Utilities import utilities as ut
 from Utilities import mass_balance as mb
-
+from Utilities import imag_draw
 
 
 st.set_page_config(
@@ -33,6 +33,8 @@ with st.container(border = True):
 
 direct_circuit = mb.DirectGrinding()
 chart = direct_circuit.chart_balance()
+image_display = "./Imagenes/direct_circuit.png"
+load_data_image = imag_draw.DrawBalances()
 
 with st.container(border=True):
     but_1, but_2 = st.columns(2)
@@ -42,8 +44,13 @@ with st.container(border=True):
 
     if balance_direct_circuit:
         direct_circuit.mass_balance_direct_circuit(fresh_charge,moisture,spec_grav, over_sol,under_sol,feed_sol,discharge_sol,chart)
-        
+        image_display = load_data_image.draw_direct_circuit_balance(chart)
+
     if clear_direct_circuit:
         chart.iloc[:,1:] = ' '
+        
+st.image(image_display)
 
-st.dataframe(data =chart, hide_index = True)
+with st.container(border = True):
+    st.dataframe(data =chart, hide_index = True, use_container_width = True)
+
