@@ -1,68 +1,90 @@
 import pandas as pd
 import numpy as np
 
-def hidrociclon_balance(feed_tms,feed_rcc,feed_sg,uf_density,of_density):
+
+class HydroyclonMassBalance():
     """
-    This function calculate the mass balance in an hydrociclon, generate three list of
-    five elements heach one (TMS, % solids, TMA, density,TMP) for flows of OF, UF and Feed.
+    This Class contains different elements to execute hydrocyclon mass balances.
     """
 
-    # OF Balance
-    of_TMS = round(feed_tms,2)
-    of_density = round(of_density,2)
-    of_solid = round((100*(of_density-1))/(of_density*(1-(1/feed_sg))),2)
-    of_TMA = round((of_TMS/of_solid)*(100-of_solid),2)
-    of_TMP = round(of_TMS + of_TMA,2)
-    of_VMP = round(of_TMS/feed_sg + of_TMA,2) 
-    of_sol_vol = round(of_TMS/feed_sg/of_VMP,2)
+    def __init__(self):
+        pass
 
-    of_balance = [of_TMS, of_TMA, of_TMP, of_VMP, of_density,of_sol_vol, of_solid]
-    # UF Balance
-    uf_TMS = round(feed_tms*(feed_rcc/100),2)
-    uf_density = round(uf_density,2)
-    uf_solid = round((100*(uf_density-1))/(uf_density*(1-(1/feed_sg))),2)
-    uf_TMA = round((uf_TMS/uf_solid)*(100-uf_solid),2)
-    uf_TMP = round(uf_TMS +  uf_TMA,2)
-    uf_VMP = round(uf_TMS/feed_sg + uf_TMA,2) 
-    uf_sol_vol = round(uf_TMS/feed_sg/uf_VMP,2)
+    def circulating_load_sol_method(self, sol_over, sol_under,sol_feed):
+        """
+        Return CC base on %sol hydrocyclon in feed, over and under streams.
+        Transforms in to dilution rate each one and return a Circulating load
+        in integers.
+        """
+        cc = (1/sol_over-1/sol_feed)/(1/sol_feed - 1/sol_under)
 
-    uf_balance = [uf_TMS, uf_TMA, uf_TMP, uf_VMP, uf_density,uf_sol_vol, uf_solid]
-
-    # Feed Balance 
-    feed_TMS = round(feed_tms*((feed_rcc/100)+1),2)
-    feed_TMA = uf_TMA + of_TMA
-    feed_sol = round(feed_TMS/(feed_TMA+feed_TMS)*100,2)
-    feed_TMP = feed_TMS + feed_TMA
-    feed_density = round(1/(((feed_sol/100)/feed_sg)+1-(feed_sol/100)),2)
-    feed_VMP = uf_VMP + of_VMP 
-    feed_sol_vol = round(feed_TMS/feed_sg/feed_VMP,2)
+        return cc
     
-    feed_balance = [feed_TMS, feed_TMA, feed_TMP, feed_VMP, feed_density,feed_sol_vol, feed_sol]
+    def hydrocyclon_balance_by_solid(self, feed_tms,feed_sg,solid_feed,solid_uf,solid_of):
+        """
+        This function calculate the mass balance in an hydrocyclon, generate three list of
+        five elements heach one (TMS, % solids, TMA, density,TMP) for flows of OF, UF and Feed.
+        """
 
-    return of_balance, uf_balance, feed_balance
+        cc = self.circulating_load_sol_method(solid_of,solid_uf,solid_feed)
+        # OF Balance
+        of_TMS = feed_tms/(1+cc)
+        of_solid = solid_of
+        of_TMP = of_TMS/of_solid*100
+        of_TMA = of_TMP - of_TMS
+        of_VMP  = of_TMS/feed_sg + of_TMA
+        of_density = of_TMP/of_VMP
+        of_sol_vol = of_TMS/feed_sg/of_VMP*100
 
-## This code below could be an class to be more readable
-def hydrocyclon_mass_balance_simple_chart():
-    """
-    Create a matrix to display in 2_Hidrociclon mass balance
-    """
-    tabular = pd.DataFrame({'Stream':['Ore (ton/hr)','Water (m3/hr)','Slurry (ton/hr)','Slurry (m3/hr)','Density (ton/m3)','%Solids (v/v)','%Solids (w/w)'],
-                        'Feed':['','','','','','',''],
-                        'OverFlow':['','','','','','',''],
-                        'UnderFlow':['','','','','','','']})
 
-    return tabular
+        of_balance = [of_TMS, of_TMA, of_TMP, of_VMP, of_density,of_sol_vol, of_solid]
+        # UF Balance
+        uf_TMS = of_TMS*cc
+        uf_solid = solid_uf
+        uf_TMP = uf_TMS/uf_solid*100
+        uf_TMA = uf_TMP - uf_TMS
+        uf_VMP = uf_TMS/feed_sg + uf_TMA
+        uf_density = uf_TMP/uf_VMP
+        uf_sol_vol = uf_TMS/feed_sg/uf_VMP*100
 
-def hydrocyclon_mass_balance_simple(feed_tms,feed_rcc,feed_sg,uf_density,of_density,chart):
-    """
-    Take the chart from hydrocyclon_mass_balance and the calcs from hidrociclon_balance
-    and returns a fill chart.
-    """
-    of_balance, uf_balance,feed_balance = hidrociclon_balance(feed_tms,feed_rcc,feed_sg,uf_density,of_density)
+        uf_balance = [uf_TMS, uf_TMA, uf_TMP, uf_VMP, uf_density,uf_sol_vol, uf_solid]
 
-    chart.loc[:,'Feed'] = feed_balance
-    chart.loc[:,'OverFlow'] =  of_balance
-    chart.loc[:,'UnderFlow'] = uf_balance
+        # Feed Balance 
+        feed_TMS = feed_tms
+        feed_sol = solid_feed
+        feed_TMA = of_TMA + uf_TMA
+        feed_TMP = of_TMP + uf_TMP
+        feed_VMP = uf_VMP + of_VMP
+        feed_sol_vol = feed_TMP/feed_VMP
+        feed_density = feed_TMP/feed_VMP
+        feed_sol_vol = feed_TMS/feed_sg/feed_VMP*100
+        
+        feed_balance = [feed_TMS, feed_TMA, feed_TMP, feed_VMP, feed_density,feed_sol_vol, feed_sol]
+
+        return of_balance, uf_balance, feed_balance
+
+    ## This code below could be an class to be more readable
+    def hydrocyclon_mass_balance_simple_chart(self):
+        """
+        Create a matrix to display in 2_Hydrocyclon mass balance
+        """
+        tabular = pd.DataFrame({'Stream':['Ore (ton/hr)','Water (m3/hr)','Slurry (ton/hr)','Slurry (m3/hr)','Density (ton/m3)','%Solids (v/v)','%Solids (w/w)'],
+                            'Feed':['','','','','','',''],
+                            'OverFlow':['','','','','','',''],
+                            'UnderFlow':['','','','','','','']})
+
+        return tabular
+
+    def hydrocyclon_mass_balance_simple(self, feed_tms,feed_rcc,feed_sg,uf_density,of_density,chart):
+        """
+        Take the chart from hydrocyclon_mass_balance and the calcs from hidrociclon_balance
+        and returns a fill chart.
+        """
+        of_balance, uf_balance,feed_balance = self.hydrocyclon_balance_by_solid(feed_tms,feed_rcc,feed_sg,uf_density,of_density)
+
+        chart.loc[:,'Feed'] = feed_balance
+        chart.loc[:,'OverFlow'] =  of_balance
+        chart.loc[:,'UnderFlow'] = uf_balance
         
 def mass_balance_1_conc_1_elemet_chart(element,law):
     """

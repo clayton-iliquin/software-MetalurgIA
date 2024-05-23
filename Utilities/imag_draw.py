@@ -6,7 +6,6 @@ class DrawBalances:
         self.font_size = 14
         self.space = 6
 
-
     def draw_direct_circuit_balance(self, chart, image = "./Imagenes/direct_circuit.png"):
         """
         This function take the values calculated by DirectGrinding module and 
@@ -90,5 +89,29 @@ class DrawBalances:
 
         # Circ Load
         draw.text((490, 445), f"{chart.iloc[0,7]/chart.iloc[0,8]:.3f}", font=font, fill="black", align = "right")
+        
+        return image
+
+    def draw_hydrocyclon_simple_balance(self, chart, image ="./Imagenes/Hydrocyclon_mass_balance.png"):
+        image = Image.open(image)
+        draw = ImageDraw.Draw(image)
+        self.font_size = 12
+
+        try: 
+            font = ImageFont.truetype(self.font,self.font_size)
+        except:
+            font = ImageFont.truetype("arial.ttf",self.font_size)
+        
+        # Values for Feed flow
+        draw.multiline_text((190, 207), f"{chart.iloc[0,1]:,.2f}\n{chart.iloc[3,1]:,.2f}\n{chart.iloc[6,1]:.2f} ", font=font, fill="black", align = "right",spacing = self.space)
+
+        # Values for Over flow
+        draw.multiline_text((190, 90), f"{chart.iloc[0,2]:,.2f}\n{chart.iloc[3,2]:,.2f}\n{chart.iloc[6,2]:.2f} ", font=font, fill="black", align = "right",spacing = self.space)
+
+        # Values for Under flow
+        draw.multiline_text((190, 325), f"{chart.iloc[0,3]:,.2f}\n{chart.iloc[3,3]:,.2f}\n{chart.iloc[6,3]:.2f} ", font=font, fill="black", align = "right",spacing = self.space)
+
+        # Circ Load
+        draw.text((90, 360), f"{chart.iloc[0,3]/chart.iloc[0,2]:.3f}", font=font, fill="black", align = "right")
         
         return image

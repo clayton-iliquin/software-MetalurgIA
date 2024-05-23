@@ -1,6 +1,7 @@
 import streamlit as st
 from Utilities import utilities as ut
 from Utilities import mass_balance as mb
+from Utilities import imag_draw
 
 st.set_page_config(
     page_title='Hydrocyclon Mass Balance',
@@ -10,54 +11,38 @@ st.set_page_config(
 
 st.title('🌪️ Hydrocyclon Mass Balance')
 ut.logo()
-col1, col2, col3 = st.columns(3)
+
+# load functions
+cyclon_balance = mb.HydroyclonMassBalance()
+chart = cyclon_balance.hydrocyclon_mass_balance_simple_chart()
+image_display = './Imagenes/Hydrocyclon_mass_balance.png'
+load_data_image = imag_draw.DrawBalances()
+
+col1, col2 = st.columns(2)
 
 with col1:
     with st.form('Input_data'):
         st.write('Enter the data')
 
-
-        feed_tms = st.number_input('Feed (Tons/hour): ',value = 550.56)
-        feed_rcc = st.number_input('% CC',value = 250)
-        feed_sg = st.number_input('Specific gravity: ',value = 1.56)
-        uf_density = st.number_input ('U/F density',value = 1.43)
-        of_density = st.number_input ('O/F density',value = 1.14)
+        feed_tms = st.number_input('Dry Feed (Tons/hour): ',value = 1622.8)
+        
+        # feed_rcc = st.number_input('% CC',value = 250)
+        feed_sg = st.number_input('Specific gravity: ',value = 2.80)
+        solids_feed = st.number_input ('Feed Cyclon (%)',value = 62.2)
+        solids_uf = st.number_input ('%Sol U/F Cyclon(%)',value = 76.0)
+        solids_of = st.number_input ('%Sol O/f Cyclon(%)',value = 40.0)
 
         execute = st.form_submit_button('Execute')
 
+
     if execute:
-        of_balance,uf_balance,feed_balance = mb.hidrociclon_balance(feed_tms,feed_rcc,feed_sg,uf_density,of_density)
-
-    else:
-        of_balance,uf_balance,feed_balance =[['','','','',''],['','','','',''],['','','','','']]
-    
-
-    st.divider()
-
-    st.write('### Legend')
-    legend = ['TMS (ton/hr)','%Sol','TMA (ton/hr)','Density (Ton/m3)','TMP (Ton/hr)']
-    cols = ut.grid(2)
-    for col, descr in zip(cols,legend):
-        cont = col.container(height=45)
-        cont.caption(descr)
-
+        cyclon_balance.hydrocyclon_mass_balance_simple(feed_tms,feed_sg,solids_feed,solids_uf,solids_of,chart)
+        image_display = load_data_image.draw_hydrocyclon_simple_balance(chart)
 
 with col2:
-    st.write('### Feed Balance')
-    ut.grid_display(2,feed_balance)
-    
-    st.divider()
 
-    st.image('./Imagenes/Hidrociclon.jpg')
+    st.image(image_display)
 
-with col3:
-    st.write('### OF Balance')
-    ut.grid_display(2,of_balance)
+with st.container(border = True):
 
-    st.divider()
-    st.write('### UF Balance')
-   
-    ut.grid_display(2,uf_balance)
-
-    st.divider()
-    
+    st.dataframe(data = chart, hide_index = True, use_container_width = True)
