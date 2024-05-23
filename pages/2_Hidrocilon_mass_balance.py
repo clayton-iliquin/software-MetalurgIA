@@ -15,7 +15,7 @@ ut.logo()
 # load functions
 cyclon_balance = mb.HydroyclonMassBalance()
 chart = cyclon_balance.hydrocyclon_mass_balance_simple_chart()
-image_display = './Imagenes/Hydrocyclon_mass_balance.png'
+image_display = './Imagenes/hydrocyclon_mass_balance.png'
 load_data_image = imag_draw.DrawBalances()
 
 col1, col2 = st.columns(2)
