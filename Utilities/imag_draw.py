@@ -92,7 +92,7 @@ class DrawBalances:
         
         return image
 
-    def draw_hydrocyclon_simple_balance(self, chart, image ="./Imagenes/Hydrocyclon_mass_balance.png"):
+    def draw_hydrocyclon_simple_balance(self, chart, image ="./Imagenes/hydrocyclon_mass_balance.png"):
         image = Image.open(image)
         draw = ImageDraw.Draw(image)
         self.font_size = 12
