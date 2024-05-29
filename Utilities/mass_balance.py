@@ -444,3 +444,82 @@ class ReverseGrinding(DirectGrinding):
         chart.iloc[4,1:] = chart.iloc[2,1:]/chart.iloc[3,1:]
         # %Sol (v/v)
         chart.iloc[5,1:] = (chart.iloc[0,1:]/specific_gravity)/chart.iloc[3,1:]*100
+
+        return chart
+
+class DSagGrinding(ReverseGrinding):
+
+    def __init__(self):
+        pass
+
+    def chart_d_sag_grinding(self):
+        tabular = pd.DataFrame({'Characteristic':['Ore (ton/hr)','Water (m3/hr)','Slurry (ton/hr)','Slurry (m3/hr)','Density (ton/m3)','%Solids (v/v)','%Solids (w/w)'],
+        'Fresh Feed' : ['','','','','','',''],
+        'Water to SAG' : ['','','','','','',''],
+        'SAG Disch.' : ['','','','','','',''],
+        'Over Trommel' : ['','','','','','',''],
+        'Under Trommel' : ['','','','','','',''],
+        'Mill Feed': ['','','','','','',''],
+        'Water to Mill' : ['','','','','','',''],
+        'Mill Discharge' : ['','','','','','',''],
+        'Water to Discharge' : ['','','','','','',''],
+        'Cyclon Feed' : ['','','','','','',''],
+        'Cyclon U\' flow' : ['','','','','','',''],
+        'Cyclon O\' flow' : ['','','','','','','']
+        })
+
+        return tabular
+    
+    def mass_balance_d_sag(self, fresh_charge, moisture, spec_grav, sag_solid_discharge, cc_pebbles,moisture_pebbles,over_sol,under_sol,feed_sol,discharge_sol,chart):
+        """
+        For this balance I reuse some functions from Reverse grinding Class, 
+        1. chart_balance: who returns a chart for calc the mass balance. (Heredatary by DirectGrinding)
+        2. mass_balance_reverse_circuit to execute calcs to mass balance. 
+
+        After that, I could merge the calcs in chart_d_sag_grinding() to display the final result. 
+
+        """
+
+        mall_bill_chart = self.chart_balance()
+
+        ball_mill_balance = self.mass_balance_reverse_circuit(fresh_charge,moisture,spec_grav,over_sol,under_sol,feed_sol,discharge_sol, mall_bill_chart)
+
+        # fill data 
+        chart.iloc[:,6:13]  = ball_mill_balance.iloc[:,2:]
+        chart.iloc[:,1] = ball_mill_balance.iloc[:,1]
+
+        # Pebbles / Over Trommel
+        chart.iloc[0,4] = chart.iloc[0,1]*cc_pebbles/100 # Ore Ton/h
+        chart.iloc[1,4] = chart.iloc[0,4]*moisture_pebbles/(100-moisture_pebbles) # Water Slurry m3/h
+        chart.iloc[2,4] = chart.iloc[0,4] + chart.iloc[1,4] # Slurry ton/h
+        chart.iloc[6,4] = 100 - moisture_pebbles # %Sol w/w
+        # chart.iloc[3,4] = chart.iloc[0,4]/spec_grav + chart.iloc[1,4] # Slurry m3/h
+
+        # SAG Discharge
+        chart.iloc[0,3] = chart.iloc[0,4] + chart.iloc[0,1] # Ore Ton/h
+        chart.iloc[6,3] = sag_solid_discharge # %Sol w/w
+        chart.iloc[2,3] = chart.iloc[0,3]/sag_solid_discharge*100 # Slurry ton/h
+        chart.iloc[1,3] = chart.iloc[2,3] - chart.iloc[0,3] # Water Slurry m3/h
+        # chart.iloc[3,3] = chart.iloc[0,3]/spec_grav + chart.iloc[1,3] # Slurry m3/h
+
+        # Under Trommel
+        chart.iloc[0,5] = chart.iloc[0,1]  # Ore Ton/h
+        chart.iloc[1,5] = chart.iloc[1,3] - chart.iloc[1,4] # Water Slurry m3/h
+        chart.iloc[2,5] = chart.iloc[1,5] + chart.iloc[0,5] # Slurry ton/h
+        # chart.iloc[3,5] = chart.iloc[0,5]/spec_grav + chart.iloc[1,5] #Slurry m3/h
+        chart.iloc[6,5] = chart.iloc[0,1]/chart.iloc[2,5]*100 # %Sol w/w
+
+        # Slurry m3/h
+        chart.iloc[3,3:6] = chart.iloc[0,3:6]/spec_grav + chart.iloc[1,3:6] # %Sol w/w
+
+        # Water to SAG
+        chart.iloc[1:4,2] = chart.iloc[3,3]-(chart.iloc[3,1]+chart.iloc[3,4])
+        chart.iloc[0,2] = 0
+        chart.iloc[6,2] = 0
+
+        # Density 
+        chart.iloc[4,2:6] = chart.iloc[2,2:6]/chart.iloc[3,2:6]
+        # %Sol (v/v)
+        chart.iloc[5,2:6] = (chart.iloc[0,2:6]/spec_grav)/chart.iloc[3,2:6]*100
+        
+        return chart
